@@ -41,3 +41,14 @@ count=sc.parallelize(p)\
          .collect()
 for i in count:
     print i[0],":",i[1]
+
+lines = sc.textFile("nhBenefit.xt")
+wc = lines.flatMap(lambda x:x.split(' ')).map(lambda x:x.strip())
+p =wc.collect()
+count=sc.parallelize(p)\
+         .map(lambda word: (word, 1))\
+         .reduceByKey(add)\
+         .sortBy(lambda a:a[1])\
+         .collect()
+for i in count:
+    print i[0],":",i[1]
